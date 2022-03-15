@@ -7,7 +7,7 @@ AWS.config.update({ region: 'us-east-1' });
 const sqs = new AWS.SQS({ endpoint: 'http://localhost:4566' });
 // as i said, i like promises
 sqs.receiveMessage = promisify(sqs.receiveMessage);
-const QueueUrl = 'http://localhost:4566/000000000000/local-queue'; // leave this one blank for now!
+const QueueUrl = 'http://localhost:4566/000000000000/contracts-queue'; // leave this one blank for now!
 const receiveParams = {
   QueueUrl,
   MaxNumberOfMessages: 1
