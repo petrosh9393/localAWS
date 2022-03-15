@@ -7,6 +7,7 @@ AWS.config.update({ region: 'us-east-1' });
 const sqs = new AWS.SQS({ endpoint: 'http://localhost:4566' });
 // as i said, i like promises
 sqs.receiveMessage = promisify(sqs.receiveMessage);
+sqs.deleteMessage = promisify(sqs.deleteMessage);
 const QueueUrl = 'http://localhost:4566/000000000000/contracts-queue'; // leave this one blank for now!
 const receiveParams = {
   QueueUrl,
@@ -28,7 +29,8 @@ async function receive() {
         ReceiptHandle: firstMessage.ReceiptHandle
       };
       console.log(deleteParams);
-      sqs.deleteMessage(deleteParams);
+      const result = await sqs.deleteMessage(deleteParams);
+      console.log('DELETE RESULT', result);
     } else {
       // console.log('waiting...');
     }
