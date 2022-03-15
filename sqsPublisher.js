@@ -18,4 +18,4 @@ async function send(msg) {
     console.log('PUBLISHED', data);
 }
 
-Promise.all([1,2,3,4,5].map((_, i) => send(`message #${i}`))).catch(console.error);
+Promise.all([1,2,3,4,5].map((_, i) => send(`message sqs #${i}`))).catch(console.error);
