@@ -37,3 +37,8 @@ Start publisher:
 ```shell
 npm run publisher
 ```
+
+Work with SQS:
+- Start consumer: `npm run consumer`
+- Start publisher: `npm run sqsPublisher`
+- Check the logs
