@@ -10,7 +10,7 @@ const sns = new AWS.SNS({ endpoint: 'http://localhost:4566' });
 // rather than w/ callbacks
 // therefore I'm making "sns.publish" return promise
 sns.publish = promisify(sns.publish);
-const TopicArn = 'arn:aws:sns:us-east-1:000000000000:local-topic'; // leave this one blank for now!
+const TopicArn = 'arn:aws:sns:us-east-1:000000000000:contracts-topic'; // leave this one blank for now!
 async function publish(msg) {
   const publishParams = {
     TopicArn,
