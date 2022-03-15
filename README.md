@@ -28,9 +28,10 @@ Add SQS service in `docker-compose.yml`
       - aws-credentials:/root/.aws
 ```
 
-Add new SNS topic in localstack here: `services/localstack/aws/sns.sh`
+Add new SNS topic and SQS queue in localstack here: `services/localstack/aws/sns.sh`
 ```shell
 awslocal sns create-topic --name contracts-topic
+awslocal sqs create-queue --queue-name  contracts-queue
 ```
 
 Start publisher:
