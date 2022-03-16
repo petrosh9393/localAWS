@@ -5,9 +5,11 @@ const { promisify } = require('util');
 AWS.config.update({ region: 'us-east-1' });
 // also, the same as with the publisher
 const sqs = new AWS.SQS({ endpoint: 'http://localhost:4566' });
+const sns = new AWS.SNS({ endpoint: 'http://localhost:4566' });
 // as i said, i like promises
 sqs.receiveMessage = promisify(sqs.receiveMessage);
-const QueueUrl = 'http://localhost:4566/000000000000/local-queue'; // leave this one blank for now!
+sqs.deleteMessage = promisify(sqs.deleteMessage);
+const QueueUrl = 'http://localhost:4566/000000000000/contracts-queue'; // leave this one blank for now!
 const receiveParams = {
   QueueUrl,
   MaxNumberOfMessages: 1
@@ -15,7 +17,7 @@ const receiveParams = {
 async function receive() {
   try {
     const queueData = await sqs.receiveMessage(receiveParams);
-  if (
+    if (
       queueData &&
       queueData.Messages &&
       queueData.Messages.length > 0
@@ -28,13 +30,23 @@ async function receive() {
         ReceiptHandle: firstMessage.ReceiptHandle
       };
       console.log(deleteParams);
-       sqs.deleteMessage(deleteParams);
+      const result = await sqs.deleteMessage(deleteParams);
+      console.log('DELETE RESULT', result);
     } else {
-      console.log('waiting...');
+      // console.log('waiting...');
     }
   } catch (e) {
     console.log('ERROR: ', e);
   }
 }
+
+sns.subscribe({
+  TopicArn : 'arn:aws:sns:us-east-1:000000000000:contracts-topic',
+  Protocol: 'http',
+  Endpoint: 'http://localhost:4566/000000000000/contracts-topic'
+}, (err, data) => {
+  console.log('SNS', err, data);
+});
+
 // we poll every 500ms and act accordingly
 setInterval(receive, 500);
